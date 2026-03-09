@@ -1,0 +1,115 @@
+{
+  "file": "PTB_J1.fcs",
+  "sample": "PTB_J1",
+  "channels": {
+    "fluor": "B525-H",
+    "fsc": "FSC-H"
+  },
+  "transform_source": "flowutils.transforms.logicle",
+  "windows": {
+    "mmb_window": [
+      0.7141938599636604,
+      0.8972652021227275
+    ],
+    "dg_window": [
+      0.12846260309997892,
+      0.5754711206743596
+    ]
+  },
+  "boundaries": {
+    "boundary_3_6": 0.7866521687606305,
+    "boundary_6_8": 0.8335122374937973
+  },
+  "n_total_events": 56025,
+  "n_finite": 56025,
+  "n_roi": 11677,
+  "percentiles_init": {
+    "LOW_Q": 25,
+    "MID_Q": 50,
+    "HIGH_Q": 75
+  },
+  "min_events": {
+    "MIN_EVENTS_3COMP": 1000,
+    "MIN_EVENTS_2COMP": 300
+  },
+  "hard_counts": {
+    "MMB-3 only": 1196,
+    "MMB-3 sandwich": 127,
+    "MMB-3 multi": 1322,
+    "MMB-6 only": 1616,
+    "MMB-6 sandwich": 374,
+    "MMB-6 multi": 2099,
+    "MMB-8 only": 2631,
+    "MMB-8 sandwich": 412,
+    "MMB-8 multi": 1900
+  },
+  "expected_counts": {
+    "MMB-3 only": 1191.2447474394842,
+    "MMB-3 sandwich": 145.1176233880417,
+    "MMB-3 multi": 1308.6376291724741,
+    "MMB-6 only": 1605.8865535483535,
+    "MMB-6 sandwich": 553.0234179996011,
+    "MMB-6 multi": 1930.0900284520453,
+    "MMB-8 only": 2609.4719351515487,
+    "MMB-8 sandwich": 429.7710769365557,
+    "MMB-8 multi": 1903.7569879118953
+  },
+  "per_bead": {
+    "3": {
+      "n_roi": 2645,
+      "model": "gmm3",
+      "means": [
+        0.13132344793065356,
+        0.2546216948835901,
+        0.4772487479867283
+      ],
+      "expected": {
+        "only": 1191.2447474394842,
+        "sandwich": 145.1176233880417,
+        "multi": 1308.6376291724741
+      },
+      "eff_sandwich": 0.05486488596901387,
+      "eff_multi": 0.4947590280425233,
+      "warning": null
+    },
+    "6": {
+      "n_roi": 4089,
+      "model": "gmm3",
+      "means": [
+        0.13143944788048512,
+        0.3167694277934872,
+        0.47912210797527954
+      ],
+      "expected": {
+        "only": 1605.8865535483535,
+        "sandwich": 553.0234179996011,
+        "multi": 1930.0900284520453
+      },
+      "eff_sandwich": 0.1352466172657376,
+      "eff_multi": 0.47202006076107733,
+      "warning": null
+    },
+    "8": {
+      "n_roi": 4943,
+      "model": "gmm3",
+      "means": [
+        0.13228087494307936,
+        0.20111441116074413,
+        0.46578414292027803
+      ],
+      "expected": {
+        "only": 2609.4719351515487,
+        "sandwich": 429.7710769365557,
+        "multi": 1903.7569879118953
+      },
+      "eff_sandwich": 0.08694539286598335,
+      "eff_multi": 0.38514201657129177,
+      "warning": null
+    }
+  },
+  "overall": {
+    "eff_sandwich": 0.0965926281000427,
+    "eff_multi": 0.44039433463530153
+  },
+  "warnings": []
+}

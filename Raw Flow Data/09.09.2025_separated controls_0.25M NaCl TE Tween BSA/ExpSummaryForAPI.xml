@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<Experiment xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Tubes>
+    <Tube Name="Buffer_TE_Tw_BSA_0.25MNaCl" SignalStatisticsSettingId="0" />
+    <Tube Name="3MMB_1" SignalStatisticsSettingId="0" />
+    <Tube Name="6MMB_1" SignalStatisticsSettingId="0" />
+    <Tube Name="8MMB_1" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_26a_1" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_150_1" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_374a_1" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_mix_1" SignalStatisticsSettingId="0" />
+  </Tubes>
+  <Plates />
+  <Populations>
+    <Population Name="P1" />
+  </Populations>
+  <StatisticsSettings>
+    <TubeHeaderItems>
+      <TubeHeaderItem>EventsCount</TubeHeaderItem>
+      <TubeHeaderItem>RecordTime</TubeHeaderItem>
+      <TubeHeaderItem>Volume</TubeHeaderItem>
+      <TubeHeaderItem>AbortRate</TubeHeaderItem>
+    </TubeHeaderItems>
+    <PopulationStatisticsItems>
+      <PopulationStatisticsItem>Count</PopulationStatisticsItem>
+      <PopulationStatisticsItem>PercentOfParent</PopulationStatisticsItem>
+      <PopulationStatisticsItem>PercentOfAll</PopulationStatisticsItem>
+      <PopulationStatisticsItem>Concentration</PopulationStatisticsItem>
+    </PopulationStatisticsItems>
+    <SignalStatisticsSettings>
+      <SignalStatisticsSetting Id="0">
+        <SignalStatisticsSettingInfos />
+      </SignalStatisticsSetting>
+    </SignalStatisticsSettings>
+  </StatisticsSettings>
+</Experiment>

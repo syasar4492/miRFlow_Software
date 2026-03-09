@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<Experiment xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Tubes>
+    <Tube Name="water" SignalStatisticsSettingId="0" />
+    <Tube Name="3MMB_noPNA_noPl" SignalStatisticsSettingId="0" />
+    <Tube Name="3MMB_PNA_noPl" SignalStatisticsSettingId="0" />
+    <Tube Name="3MMB_noPNA_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="3MMB_PNA_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="3MMB_noPNA_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="3MMB_PNA_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="6MMB_noPNA_noPl" SignalStatisticsSettingId="0" />
+    <Tube Name="6MMB_PNA_noPl" SignalStatisticsSettingId="0" />
+    <Tube Name="6MMB_noPNA_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="6MMB_PNA_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="6MMB_noPNA_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="6MMB_PNA_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="8MMB_noPNA_noPl" SignalStatisticsSettingId="0" />
+    <Tube Name="8MMB_PNA_noPl" SignalStatisticsSettingId="0" />
+    <Tube Name="8MMB_noPNA_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="8MMB_PNA_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="8MMB_noPNA_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="8MMB_PNA_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="buffer_noplasma" SignalStatisticsSettingId="0" />
+    <Tube Name="buffer_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="buffer_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_noPNA_nopl" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_noPNA_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_noPNA_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG26a_nopl" SignalStatisticsSettingId="0" />
+    <Tube Name="DG26a_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG26a_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_150_nopl" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_150_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_150_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG374a_nopl" SignalStatisticsSettingId="0" />
+    <Tube Name="DG374a_TB_idropped this" SignalStatisticsSettingId="0" />
+    <Tube Name="DG374a_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_mix_noPNA_nopl" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_mix_PNAs_nopl" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_mix_noPNAs_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_mix_noPNAs_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_mix_PNAs_TB" SignalStatisticsSettingId="0" />
+    <Tube Name="DG_mix_PNAs_PTB" SignalStatisticsSettingId="0" />
+    <Tube Name="Tube41" SignalStatisticsSettingId="0" />
+    <Tube Name="Tube42" SignalStatisticsSettingId="0" />
+    <Tube Name="Tube43" SignalStatisticsSettingId="0" />
+    <Tube Name="Tube44" SignalStatisticsSettingId="0" />
+    <Tube Name="Tube45" SignalStatisticsSettingId="0" />
+  </Tubes>
+  <Plates />
+  <Populations>
+    <Population Name="P1" />
+  </Populations>
+  <StatisticsSettings>
+    <TubeHeaderItems>
+      <TubeHeaderItem>EventsCount</TubeHeaderItem>
+      <TubeHeaderItem>RecordTime</TubeHeaderItem>
+      <TubeHeaderItem>Volume</TubeHeaderItem>
+      <TubeHeaderItem>AbortRate</TubeHeaderItem>
+    </TubeHeaderItems>
+    <PopulationStatisticsItems>
+      <PopulationStatisticsItem>Count</PopulationStatisticsItem>
+      <PopulationStatisticsItem>PercentOfParent</PopulationStatisticsItem>
+      <PopulationStatisticsItem>PercentOfAll</PopulationStatisticsItem>
+      <PopulationStatisticsItem>Concentration</PopulationStatisticsItem>
+    </PopulationStatisticsItems>
+    <SignalStatisticsSettings>
+      <SignalStatisticsSetting Id="0">
+        <SignalStatisticsSettingInfos />
+      </SignalStatisticsSetting>
+    </SignalStatisticsSettings>
+  </StatisticsSettings>
+</Experiment>

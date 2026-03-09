@@ -1,0 +1,208 @@
+{
+  "script": "mmb_size_thresholds_from_controls.py",
+  "paths": {
+    "input_dir": "D:\\ICL Module Notes and more\\Year 4\\FYP\\Software Automation\\Raw Flow Data\\MMB & DG Controls Unrefined",
+    "output_json": "D:\\ICL Module Notes and more\\Year 4\\FYP\\Software Automation\\Visual Flow Data\\Json Files\\mmb_fsc_thresholds.json"
+  },
+  "transform": {
+    "name": "logicle",
+    "source": "flowutils.transforms.logicle",
+    "params_rule": {
+      "T": "max(262144, observed vmax)",
+      "M": 4.5,
+      "W": 0.5,
+      "A": "0.5 if vmin < 0 else 0.0"
+    }
+  },
+  "fsc_channel": "FSC-H",
+  "shoulder_fraction": 0.05,
+  "min_events_per_file": 500,
+  "per_size_summary": {
+    "3": {
+      "n_files": 5,
+      "start_fsc_median": 0.7148061821617586,
+      "start_fsc_iqr": [
+        0.7147512352224094,
+        0.7155030816953813
+      ],
+      "peak_fsc_median": 0.7443222860126362,
+      "peak_fsc_iqr": [
+        0.7442183577467232,
+        0.7444578127782462
+      ]
+    },
+    "6": {
+      "n_files": 5,
+      "start_fsc_median": 0.7866521687606305,
+      "start_fsc_iqr": [
+        0.7865458190589583,
+        0.7877550976675609
+      ],
+      "peak_fsc_median": 0.8235440279322381,
+      "peak_fsc_iqr": [
+        0.823448112803851,
+        0.8236896831503486
+      ]
+    },
+    "8": {
+      "n_files": 5,
+      "start_fsc_median": 0.8335122374937973,
+      "start_fsc_iqr": [
+        0.8332600294632357,
+        0.837469627451473
+      ],
+      "peak_fsc_median": 0.8657138384939995,
+      "peak_fsc_iqr": [
+        0.8654184061246326,
+        0.8658472243550848
+      ]
+    }
+  },
+  "recommended_boundaries": {
+    "boundary_3_6": 0.7866521687606305,
+    "boundary_6_8": 0.8335122374937973,
+    "interpretation": "Boundaries are defined as the median LEFT-shoulder (start) of the larger bead population. This enforces: events that begin in the MMB-3 range remain MMB-3 even if they smear rightward.",
+    "assignment_rule": {
+      "MMB-3": "FSC < boundary_3_6  (within bead-like region)",
+      "MMB-6": "boundary_3_6 <= FSC < boundary_6_8",
+      "MMB-8": "FSC >= boundary_6_8"
+    }
+  },
+  "per_file_estimates": [
+    {
+      "file": "3MMB_1.fcs",
+      "mmb_size": 3,
+      "n_used": 5242,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.7458558327025826,
+      "start_fsc": 0.7181792557715605,
+      "status": "ok"
+    },
+    {
+      "file": "3MMB_2.fcs",
+      "mmb_size": 3,
+      "n_used": 5274,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.7441293638475706,
+      "start_fsc": 0.7143332639702324,
+      "status": "ok"
+    },
+    {
+      "file": "3MMB_3.fcs",
+      "mmb_size": 3,
+      "n_used": 5269,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.7443222860126362,
+      "start_fsc": 0.7148061821617586,
+      "status": "ok"
+    },
+    {
+      "file": "3MMB_4.fcs",
+      "mmb_size": 3,
+      "n_used": 5263,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.7444578127782462,
+      "start_fsc": 0.7155030816953813,
+      "status": "ok"
+    },
+    {
+      "file": "3MMB_5.fcs",
+      "mmb_size": 3,
+      "n_used": 5274,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.7442183577467232,
+      "start_fsc": 0.7147512352224094,
+      "status": "ok"
+    },
+    {
+      "file": "6MMB_1.fcs",
+      "mmb_size": 6,
+      "n_used": 5803,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8254935319327275,
+      "start_fsc": 0.7882895491329636,
+      "status": "ok"
+    },
+    {
+      "file": "6MMB_2.fcs",
+      "mmb_size": 6,
+      "n_used": 5855,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.823448112803851,
+      "start_fsc": 0.7865458190589583,
+      "status": "ok"
+    },
+    {
+      "file": "6MMB_3.fcs",
+      "mmb_size": 6,
+      "n_used": 5854,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8235440279322381,
+      "start_fsc": 0.7866521687606305,
+      "status": "ok"
+    },
+    {
+      "file": "6MMB_4.fcs",
+      "mmb_size": 6,
+      "n_used": 3843,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8230508871210565,
+      "start_fsc": 0.7783792574162943,
+      "status": "ok"
+    },
+    {
+      "file": "6MMB_5.fcs",
+      "mmb_size": 6,
+      "n_used": 5882,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8236896831503486,
+      "start_fsc": 0.7877550976675609,
+      "status": "ok"
+    },
+    {
+      "file": "8MMB_1.fcs",
+      "mmb_size": 8,
+      "n_used": 5527,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8676385800676425,
+      "start_fsc": 0.8406926621511015,
+      "status": "ok"
+    },
+    {
+      "file": "8MMB_2.fcs",
+      "mmb_size": 8,
+      "n_used": 5202,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8654184061246326,
+      "start_fsc": 0.837469627451473,
+      "status": "ok"
+    },
+    {
+      "file": "8MMB_3.fcs",
+      "mmb_size": 8,
+      "n_used": 5235,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8652874423173189,
+      "start_fsc": 0.8332600294632357,
+      "status": "ok"
+    },
+    {
+      "file": "8MMB_4.fcs",
+      "mmb_size": 8,
+      "n_used": 5414,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8658472243550848,
+      "start_fsc": 0.8335122374937973,
+      "status": "ok"
+    },
+    {
+      "file": "8MMB_5.fcs",
+      "mmb_size": 8,
+      "n_used": 5446,
+      "fsc_channel": "FSC-H",
+      "peak_fsc": 0.8657138384939995,
+      "start_fsc": 0.832691330217089,
+      "status": "ok"
+    }
+  ]
+}

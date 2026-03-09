@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<Experiment xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Tubes>
+    <Tube Name="0 NaCl_Beads" SignalStatisticsSettingId="0" />
+    <Tube Name="0 NaCl_E1" SignalStatisticsSettingId="0" />
+    <Tube Name="0 NaCl_F1" SignalStatisticsSettingId="0" />
+    <Tube Name="0 NaCl_G1" SignalStatisticsSettingId="0" />
+    <Tube Name="0 NaCl_E2" SignalStatisticsSettingId="0" />
+    <Tube Name="0 NaCl_F2" SignalStatisticsSettingId="0" />
+    <Tube Name="0 NaCl_G2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.25M NaCl_Beads" SignalStatisticsSettingId="0" />
+    <Tube Name="0.25M NaCl_E1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.25M NaCl_F1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.25M NaCl_G1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.25M NaCl_E2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.25M NaCl_F2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.25M NaCl_G2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.5M NaCl_Beads" SignalStatisticsSettingId="0" />
+    <Tube Name="0.5M NaCl_E1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.5M NaCl_F1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.5M NaCl_G1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.5M NaCl_E2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.5M NaCl_F2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.5M NaCl_G2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.75M NaCl_Beads" SignalStatisticsSettingId="0" />
+    <Tube Name="0.75M NaCl_E1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.75M NaCl_F1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.75M NaCl_G1" SignalStatisticsSettingId="0" />
+    <Tube Name="0.75M NaCl_E2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.75M NaCl_F2" SignalStatisticsSettingId="0" />
+    <Tube Name="0.75M NaCl_G2" SignalStatisticsSettingId="0" />
+    <Tube Name="1M NaCl_Beads" SignalStatisticsSettingId="0" />
+    <Tube Name="1M NaCl_E1" SignalStatisticsSettingId="0" />
+    <Tube Name="1M NaCl_F1" SignalStatisticsSettingId="0" />
+    <Tube Name="1M NaCl_G1" SignalStatisticsSettingId="0" />
+    <Tube Name="1M NaCl_E2" SignalStatisticsSettingId="0" />
+    <Tube Name="1M NaCl_F2" SignalStatisticsSettingId="0" />
+    <Tube Name="1M NaCl_G2" SignalStatisticsSettingId="0" />
+    <Tube Name="0 NaCl_E2_second try" SignalStatisticsSettingId="0" />
+  </Tubes>
+  <Plates />
+  <Populations>
+    <Population Name="P1" />
+    <Population Name="3MMB" />
+    <Population Name="6MMB" />
+    <Population Name="8MMB" />
+    <Population Name="miR-26a" />
+    <Population Name="miR-150" />
+    <Population Name="miR-374a" />
+    <Population Name="DG Beads" />
+  </Populations>
+  <StatisticsSettings>
+    <TubeHeaderItems>
+      <TubeHeaderItem>EventsCount</TubeHeaderItem>
+      <TubeHeaderItem>RecordTime</TubeHeaderItem>
+      <TubeHeaderItem>Volume</TubeHeaderItem>
+      <TubeHeaderItem>AbortRate</TubeHeaderItem>
+    </TubeHeaderItems>
+    <PopulationStatisticsItems>
+      <PopulationStatisticsItem>Count</PopulationStatisticsItem>
+      <PopulationStatisticsItem>PercentOfParent</PopulationStatisticsItem>
+      <PopulationStatisticsItem>PercentOfAll</PopulationStatisticsItem>
+      <PopulationStatisticsItem>Concentration</PopulationStatisticsItem>
+    </PopulationStatisticsItems>
+    <SignalStatisticsSettings>
+      <SignalStatisticsSetting Id="0">
+        <SignalStatisticsSettingInfos />
+      </SignalStatisticsSetting>
+    </SignalStatisticsSettings>
+  </StatisticsSettings>
+</Experiment>

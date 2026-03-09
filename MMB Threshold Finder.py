@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # mmb_size_thresholds_from_controls.py
-#testing a comment here 
 #
 # =============================================================================
 # PURPOSE

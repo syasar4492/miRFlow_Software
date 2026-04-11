@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-# patient_fcs_viewer_logicle_2d_only_with_grid.py
+# patient_fcs_viewer_flowjo_like_display.py
 #
 # =============================================================================
 # PURPOSE
 # =============================================================================
-# Minimal viewer for patient/control .fcs files:
+# Viewer for patient/control .fcs files with FlowJo-like visual display:
 #   - Read every *.fcs in a folder
 #   - Auto-detect FSC (size) and green fluorescence (B525-H / FL1-H)
-#   - Apply Logicle transform (flowutils) with asinh fallback
+#   - Apply Logicle transform (flowutils) with asinh fallback (still available)
 #   - Save ONE plot per file:
 #       x-axis: B525-H (fluorescence)
 #       y-axis: FSC-H (size)
-#     Plot title and filename include the .fcs stem
+#   - Display mode aims to look closer to FlowJo by plotting RAW values on
+#     log-style axes whenever possible
 #
 # PLUS:
 #   - Save ONE additional "all samples" grid PNG containing all plots together
-#     (like your earlier MMB 2D / DG 2D overview panels).
 #
 # NO gating, NO KDE, NO JSON output.
 # =============================================================================
@@ -23,13 +23,34 @@
 from __future__ import annotations
 
 from pathlib import Path
-import sys, os, math
+import sys
+import os
+import math
 import numpy as np
 import pandas as pd
 import matplotlib
 matplotlib.use("Agg")  # headless backend for PNG output
 import matplotlib.pyplot as plt
+from matplotlib.ticker import LogLocator, LogFormatterMathtext
 import fcsparser
+
+
+# =============================================================================
+# DISPLAY SETTINGS
+# =============================================================================
+# FLOWJO_LIKE:
+#   - Plot RAW channel values
+#   - Use logarithmic axes where possible
+#   - This gives axis labels much closer to FlowJo
+#
+# TRANSFORMED:
+#   - Plot transformed values directly (your old behaviour)
+#
+DISPLAY_MODE = "FLOWJO_LIKE"   # options: "FLOWJO_LIKE", "TRANSFORMED"
+
+# Downsample for plotting speed / readability
+MAX_POINTS_SINGLE = 40000
+MAX_POINTS_GRID = 15000
 
 
 # =============================================================================
@@ -66,12 +87,11 @@ def apply_logicle_or_asinh(arr: np.ndarray) -> np.ndarray:
         A = 0.5 if vmin < 0 else 0.0
         return logicle_transform(arr, channel_indices=None, t=T, m=M, w=W, a=A)
 
-    # fallback
     return np.arcsinh(arr / 150.0)
 
 
 # =============================================================================
-# 2) Channel picking (same heuristic style as your Advanced FCS Viewer)
+# 2) Channel picking
 # =============================================================================
 def first_match(columns, patterns):
     ups = [c.upper() for c in columns]
@@ -90,25 +110,30 @@ def pick_channels(df: pd.DataFrame):
     fsc = first_match(cols, ["FSC-H"]) or first_match(cols, ["FSC-A", "FSC"])
 
     # Prefer FL1-H; then B525-H and other green aliases
-    fluor = (first_match(cols, ["FL1-H"])
-             or first_match(cols, ["B525-H", "BL1-H", "FITC-H", "GFP-H"])
-             or first_match(cols, ["B530-H", "B515-H", "530/30", "525/50"])
-             or first_match(cols, ["FL1-A", "BL1-A", "B525-A", "FITC-A", "GFP-A"]))
+    fluor = (
+        first_match(cols, ["FL1-H"])
+        or first_match(cols, ["B525-H", "BL1-H", "FITC-H", "GFP-H"])
+        or first_match(cols, ["B530-H", "B515-H", "530/30", "525/50"])
+        or first_match(cols, ["FL1-A", "BL1-A", "B525-A", "FITC-A", "GFP-A"])
+    )
 
     if fsc is None:
         raise ValueError(f"No FSC channel found in {cols}")
 
     if fluor is None:
-        # fallback: any -H channel not FSC/SSC/TIME/WIDTH
-        h_cands = [c for c in cols
-                   if c.upper().endswith("-H")
-                   and not any(k in c.upper() for k in ["FSC", "SSC", "TIME", "WIDTH"])]
+        h_cands = [
+            c for c in cols
+            if c.upper().endswith("-H")
+            and not any(k in c.upper() for k in ["FSC", "SSC", "TIME", "WIDTH"])
+        ]
         if h_cands:
             fluor = h_cands[0]
         else:
-            a_cands = [c for c in cols
-                       if c.upper().endswith("-A")
-                       and not any(k in c.upper() for k in ["FSC", "SSC", "TIME", "WIDTH"])]
+            a_cands = [
+                c for c in cols
+                if c.upper().endswith("-A")
+                and not any(k in c.upper() for k in ["FSC", "SSC", "TIME", "WIDTH"])
+            ]
             if not a_cands:
                 raise ValueError(f"No fluorescence channel found in {cols}")
             fluor = a_cands[0]
@@ -117,24 +142,97 @@ def pick_channels(df: pd.DataFrame):
 
 
 # =============================================================================
-# 3) Plotting helpers
+# 3) Plot helpers
 # =============================================================================
 def safe_filename(name: str) -> str:
-    # Windows-safe filename
     return "".join(c if c not in r'<>:"/\|?*' else "_" for c in name)
 
 
-def save_single_plot_png(out_dir: Path, stem: str, xvals, yvals, xlab, ylab, title: str):
+def downsample_xy(x: np.ndarray, y: np.ndarray, max_points: int, seed: int = 0):
+    n = x.size
+    if n <= max_points:
+        return x, y
+    rng = np.random.default_rng(seed)
+    idx = rng.choice(n, size=max_points, replace=False)
+    return x[idx], y[idx]
+
+
+def style_log_axes(ax):
+    """
+    Make axes look more FlowJo-like using log ticks labelled as powers of 10.
+    """
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+
+    ax.xaxis.set_major_locator(LogLocator(base=10.0))
+    ax.yaxis.set_major_locator(LogLocator(base=10.0))
+    ax.xaxis.set_major_formatter(LogFormatterMathtext(base=10.0))
+    ax.yaxis.set_major_formatter(LogFormatterMathtext(base=10.0))
+
+    ax.tick_params(axis="both", which="major", labelsize=10, width=1.2, length=7)
+    ax.tick_params(axis="both", which="minor", width=0.8, length=3.5)
+
+
+def prepare_plot_arrays(x_raw, y_raw, x_t, y_t, display_mode: str):
+    """
+    Returns:
+      x_plot, y_plot, x_label_suffix, y_label_suffix, using_log_axes
+    """
+    if display_mode == "FLOWJO_LIKE":
+        # Need strictly positive values for pure log axes
+        m = np.isfinite(x_raw) & np.isfinite(y_raw) & (x_raw > 0) & (y_raw > 0)
+        x_plot = x_raw[m]
+        y_plot = y_raw[m]
+
+        # If too many values are non-positive, fall back to transformed plotting
+        if x_plot.size < 50 or y_plot.size < 50:
+            m = np.isfinite(x_t) & np.isfinite(y_t)
+            return x_t[m], y_t[m], "(logicle)", "(logicle)", False
+
+        return x_plot, y_plot, "", "", True
+
+    # Old behaviour
+    m = np.isfinite(x_t) & np.isfinite(y_t)
+    return x_t[m], y_t[m], "(logicle)", "(logicle)", False
+
+
+def save_single_plot_png(
+    out_dir: Path,
+    stem: str,
+    x_raw,
+    y_raw,
+    x_t,
+    y_t,
+    x_channel,
+    y_channel,
+    title: str,
+    display_mode: str,
+):
     out_dir.mkdir(parents=True, exist_ok=True)
-    plt.figure(figsize=(6.5, 4.5))
-    plt.scatter(xvals, yvals, s=2, alpha=0.45)
-    plt.xlabel(xlab)
-    plt.ylabel(ylab)
-    plt.title(title)
-    plt.tight_layout()
+
+    x_plot, y_plot, x_suffix, y_suffix, use_log_axes = prepare_plot_arrays(
+        x_raw, y_raw, x_t, y_t, display_mode
+    )
+    x_plot, y_plot = downsample_xy(x_plot, y_plot, MAX_POINTS_SINGLE, seed=0)
+
+    fig, ax = plt.subplots(figsize=(6.8, 4.8))
+    ax.scatter(x_plot, y_plot, s=4, alpha=0.45)
+
+    if use_log_axes:
+        style_log_axes(ax)
+        ax.set_xlabel(f"{x_channel}", fontsize=11)
+        ax.set_ylabel(f"{y_channel}", fontsize=11)
+    else:
+        ax.set_xlabel(f"{x_channel} {x_suffix}".strip(), fontsize=11)
+        ax.set_ylabel(f"{y_channel} {y_suffix}".strip(), fontsize=11)
+        ax.tick_params(axis="both", labelsize=10)
+
+    ax.set_title(title, fontsize=14)
+    fig.tight_layout()
+
     out_path = out_dir / f"{safe_filename(stem)}.png"
-    plt.savefig(out_path, dpi=220)
-    plt.close()
+    fig.savefig(out_path, dpi=220)
+    plt.close(fig)
     print(f"Saved {out_path}")
 
 
@@ -142,59 +240,46 @@ def save_grid_overview_png(
     out_dir: Path,
     out_name: str,
     samples: list[dict],
-    xlab: str,
-    ylab: str,
+    x_channel: str,
+    y_channel: str,
     suptitle: str,
-    max_points_per_panel: int = 15000,
+    display_mode: str,
 ):
-    """
-    Create one PNG with all sample scatter plots in a grid.
-
-    samples: list of dicts with keys:
-      - name: sample stem
-      - x: np.ndarray (fluor)
-      - y: np.ndarray (fsc)
-    """
     out_dir.mkdir(parents=True, exist_ok=True)
 
     n = len(samples)
     if n == 0:
         return
 
-    # Choose a near-square grid
     ncols = int(math.ceil(math.sqrt(n)))
     nrows = int(math.ceil(n / ncols))
 
-    fig_w = max(10, 3.2 * ncols)
-    fig_h = max(8, 2.8 * nrows)
+    fig_w = max(10, 3.4 * ncols)
+    fig_h = max(8, 3.0 * nrows)
     fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_w, fig_h), squeeze=False)
 
-    # Plot each sample
     for idx, s in enumerate(samples):
         r = idx // ncols
         c = idx % ncols
         ax = axes[r][c]
 
-        x = s["x"]
-        y = s["y"]
+        x_plot, y_plot, x_suffix, y_suffix, use_log_axes = prepare_plot_arrays(
+            s["x_raw"], s["y_raw"], s["x_t"], s["y_t"], display_mode
+        )
+        x_plot, y_plot = downsample_xy(x_plot, y_plot, MAX_POINTS_GRID, seed=0)
 
-        # Downsample for readability/performance
-        if x.size > max_points_per_panel:
-            rng = np.random.default_rng(0)
-            pick = rng.choice(x.size, size=max_points_per_panel, replace=False)
-            x_plot = x[pick]
-            y_plot = y[pick]
-        else:
-            x_plot = x
-            y_plot = y
-
-        ax.scatter(x_plot, y_plot, s=1.5, alpha=0.45)
+        ax.scatter(x_plot, y_plot, s=2, alpha=0.45)
         ax.set_title(s["name"], fontsize=9)
-        ax.set_xlabel(xlab, fontsize=8)
-        ax.set_ylabel(ylab, fontsize=8)
-        ax.tick_params(axis="both", labelsize=7)
 
-    # Turn off unused subplots
+        if use_log_axes:
+            style_log_axes(ax)
+            ax.set_xlabel(x_channel, fontsize=8)
+            ax.set_ylabel(y_channel, fontsize=8)
+        else:
+            ax.set_xlabel(f"{x_channel} {x_suffix}".strip(), fontsize=8)
+            ax.set_ylabel(f"{y_channel} {y_suffix}".strip(), fontsize=8)
+            ax.tick_params(axis="both", labelsize=7)
+
     for j in range(n, nrows * ncols):
         r = j // ncols
         c = j % ncols
@@ -214,17 +299,17 @@ def save_grid_overview_png(
 # =============================================================================
 def main():
     # -----------------------------------------------------------------
-    # Patient input folder (provided)
+    # Patient input folder
     # -----------------------------------------------------------------
     INPUT_FOLDER = Path(
-        r"D:\ICL Module Notes and more\Year 4\FYP\Software Automation\Raw Flow Data\06.16.2025_20samples_optimized protocol"
+        r"D:\ICL MBE\Year 4\FYP\Software Automation\Raw Flow Data\06.03.2026 controls in plasma samples"
     )
 
     # -----------------------------------------------------------------
-    # Output folder for PNGs (provided)
+    # Output folder for PNGs
     # -----------------------------------------------------------------
     OUTPUT_FOLDER = Path(
-        r"D:\ICL Module Notes and more\Year 4\FYP\Software Automation\Visual Flow Data\20 samples optimised protocol"
+        r"D:\ICL MBE\Year 4\FYP\Software Automation\Visual Flow Data\Controls in Plasma Samples (FlowJo axes)"
     )
 
     if not INPUT_FOLDER.exists():
@@ -239,12 +324,12 @@ def main():
     print(f"Input:  {INPUT_FOLDER}")
     print(f"Output: {OUTPUT_FOLDER}")
     print(f"Transform source: {LOGICLE_SOURCE}")
+    print(f"Display mode: {DISPLAY_MODE}")
     print(f"Found {len(fcs_files)} .fcs files\n")
 
     fluor_name, fsc_name = None, None
     transform_label = "logicle" if LOGICLE_SOURCE != "asinh-fallback" else "asinh"
 
-    # Store transformed arrays for the overview grid
     grid_samples: list[dict] = []
 
     for f in fcs_files:
@@ -262,45 +347,46 @@ def main():
                 f"Have: {list(df.columns)}"
             )
 
-        # x-axis: fluorescence, y-axis: FSC
+        # RAW values
         x_raw = df[fluor_name].to_numpy(dtype=float)
         y_raw = df[fsc_name].to_numpy(dtype=float)
 
+        # Transformed values (kept available for fallback / consistency)
         x_t = apply_logicle_or_asinh(x_raw)
         y_t = apply_logicle_or_asinh(y_raw)
 
-        # Keep only finite points
-        m = np.isfinite(x_t) & np.isfinite(y_t)
-        x_t = x_t[m]
-        y_t = y_t[m]
-
         stem = f.stem
-        single_name = f"{stem}_{fsc_name}_vs_{fluor_name}_{transform_label}"
+        single_name = f"{stem}_{fsc_name}_vs_{fluor_name}_{transform_label}_{DISPLAY_MODE}"
+
         save_single_plot_png(
             out_dir=OUTPUT_FOLDER,
             stem=single_name,
-            xvals=x_t,
-            yvals=y_t,
-            xlab=f"{fluor_name} ({transform_label})",
-            ylab=f"{fsc_name} ({transform_label})",
-            title=f"{stem}: {fsc_name} vs {fluor_name} ({transform_label})",
+            x_raw=x_raw,
+            y_raw=y_raw,
+            x_t=x_t,
+            y_t=y_t,
+            x_channel=fluor_name,
+            y_channel=fsc_name,
+            title=f"{stem}: {fsc_name} vs {fluor_name}",
+            display_mode=DISPLAY_MODE,
         )
 
         grid_samples.append({
             "name": stem,
-            "x": x_t,
-            "y": y_t
+            "x_raw": x_raw,
+            "y_raw": y_raw,
+            "x_t": x_t,
+            "y_t": y_t,
         })
 
-    # One additional overview grid plot with all samples
     save_grid_overview_png(
         out_dir=OUTPUT_FOLDER,
-        out_name=f"ALL_SAMPLES_{fsc_name}_vs_{fluor_name}_{transform_label}_GRID",
+        out_name=f"ALL_SAMPLES_{fsc_name}_vs_{fluor_name}_{DISPLAY_MODE}_GRID",
         samples=grid_samples,
-        xlab=f"{fluor_name} ({transform_label})",
-        ylab=f"{fsc_name} ({transform_label})",
-        suptitle=f"All samples: {fsc_name} vs {fluor_name} ({transform_label})",
-        max_points_per_panel=15000,
+        x_channel=fluor_name,
+        y_channel=fsc_name,
+        suptitle=f"All samples: {fsc_name} vs {fluor_name}",
+        display_mode=DISPLAY_MODE,
     )
 
     print("\nDone.")

@@ -12,13 +12,20 @@
 #       y-axis: FSC-H size
 #
 # UPDATED OUTPUT ORGANISATION:
-#   - MMB/control bead plots are saved into:
-#       MMB 2D Plots
+#   - If the filename explicitly contains "MMB":
+#       save individual plot into "MMB 2D Plots"
 #
-#   - DG/fluorescent nanoparticle plots are saved into:
-#       DG 2D Plots
+#   - If the filename explicitly contains "DG":
+#       save individual plot into "DG 2D Plots"
 #
-#   - The all-samples overview grid remains directly inside OUTPUT_FOLDER.
+#   - If the filename contains neither "MMB" nor "DG":
+#       save individual plot directly inside OUTPUT_FOLDER
+#
+#   - The all-samples overview grid always remains directly inside OUTPUT_FOLDER.
+#
+# This makes the module usable for both:
+#   - MMB/DG control files
+#   - patient/sample .fcs files that are not named as MMB or DG controls
 #
 # NO gating, NO KDE, NO JSON output.
 # =============================================================================
@@ -132,24 +139,33 @@ def pick_channels(df: pd.DataFrame):
 # =============================================================================
 def classify_file_type(file_path: Path) -> str:
     """
-    Classify an FCS file as MMB or DG based on filename.
+    Classify an FCS file based on filename.
 
-    Current rule:
-      - files starting with 'DG' are treated as DG controls
-      - all other files are treated as MMB controls
+    Rules:
+      - if filename contains "DG"  → DG
+      - if filename contains "MMB" → MMB
+      - otherwise                 → SAMPLE
+
+    This avoids forcing patient files into MMB/DG folders.
 
     Examples:
       DG_150_1.fcs      -> DG
       DG_374a_2.fcs     -> DG
       6MMB_1.fcs        -> MMB
       8MMB_3.fcs        -> MMB
+      EC_A1.fcs         -> SAMPLE
+      PTB_A1.fcs        -> SAMPLE
+      TB_A2.fcs         -> SAMPLE
     """
     stem_upper = file_path.stem.upper()
 
-    if stem_upper.startswith("DG"):
+    if "DG" in stem_upper:
         return "DG"
 
-    return "MMB"
+    if "MMB" in stem_upper:
+        return "MMB"
+
+    return "SAMPLE"
 
 
 # =============================================================================
@@ -272,7 +288,8 @@ def main():
         r"D:\ICL MBE\Year 4\FYP\Software Automation\EC\Visual Flow Data\MMB and DG Controls Refined"
     )
 
-    # Individual 2D output subfolders
+    # Optional individual 2D output subfolders
+    # These are only used when filenames explicitly contain MMB or DG.
     MMB_2D_FOLDER = OUTPUT_FOLDER / "MMB 2D Plots"
     DG_2D_FOLDER = OUTPUT_FOLDER / "DG 2D Plots"
 
@@ -288,8 +305,9 @@ def main():
     print(f"CWD:    {os.getcwd()}")
     print(f"Input:  {INPUT_FOLDER}")
     print(f"Output: {OUTPUT_FOLDER}")
-    print(f"MMB 2D output: {MMB_2D_FOLDER}")
-    print(f"DG 2D output:  {DG_2D_FOLDER}")
+    print(f"MMB 2D output if filename contains 'MMB': {MMB_2D_FOLDER}")
+    print(f"DG 2D output if filename contains 'DG':   {DG_2D_FOLDER}")
+    print(f"Otherwise plots are saved directly in:    {OUTPUT_FOLDER}")
     print(f"Transform source: {LOGICLE_SOURCE}")
     print(f"Found {len(fcs_files)} .fcs files\n")
 
@@ -332,8 +350,10 @@ def main():
 
         if sample_type == "DG":
             single_out_dir = DG_2D_FOLDER
-        else:
+        elif sample_type == "MMB":
             single_out_dir = MMB_2D_FOLDER
+        else:
+            single_out_dir = OUTPUT_FOLDER
 
         single_name = f"{stem}_{fsc_name}_vs_{fluor_name}_{transform_label}"
 

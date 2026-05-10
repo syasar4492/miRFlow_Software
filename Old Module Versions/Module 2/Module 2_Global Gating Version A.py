@@ -1,6 +1,3 @@
-# advanced_fcs_viewer_FSC-H_logicle_named_outputs_subfolders_DG_WINDOW_FULLCOMMENTS.py
-#
-# =============================================================================
 # HIGH-LEVEL OVERVIEW (what this script does and why)
 # =============================================================================
 # This script automates a “control-derived gating + visualization” workflow for

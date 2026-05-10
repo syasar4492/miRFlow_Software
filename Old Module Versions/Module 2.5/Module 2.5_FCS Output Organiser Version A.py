@@ -71,7 +71,7 @@ def make_overview_for_folder(folder: Path, out_path: Path, title: str = ""):
 def main():
     # Base folder where the refined plots + subfolders live
     base = Path(
-        r"D:\ICL Module Notes and more\Year 4\FYP\Software Automation\Visual Flow Data\MMB & DG Controls Refined"
+        r"D:\ICL MBE\Year 4\FYP\Software Automation\Visual Flow Data\MMB & DG Controls Refined (High_Cut Updated)"
     )
 
     # Subfolders with 2D and 1D plots

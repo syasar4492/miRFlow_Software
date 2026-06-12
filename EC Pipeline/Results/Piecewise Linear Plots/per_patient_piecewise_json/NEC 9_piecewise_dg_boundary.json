@@ -1,0 +1,109 @@
+{
+  "file": "NEC 9.fcs",
+  "sample": "NEC 9",
+  "channels": {
+    "fluor": "B525-H",
+    "fsc": "FSC-H"
+  },
+  "transform_source": "flowutils.transforms.logicle",
+  "module2_inputs": {
+    "mmb_window": [
+      0.7864420346955261,
+      0.8972652021227275
+    ],
+    "dg_low_cut": 0.1,
+    "dg_peak_fluorescence": 0.8
+  },
+  "piecewise_boundary": {
+    "n_fsc_bins": 10,
+    "upper_multiplier": 1.25,
+    "step_fraction_per_bin": 0.025,
+    "step_absolute": 0.020000000000000004,
+    "fsc_bin_edges": [
+      0.7864420346955261,
+      0.7975243514382462,
+      0.8086066681809664,
+      0.8196889849236866,
+      0.8307713016664067,
+      0.8418536184091268,
+      0.852935935151847,
+      0.8640182518945672,
+      0.8751005686372872,
+      0.8861828853800073,
+      0.8972652021227275
+    ],
+    "fsc_bin_centres": [
+      0.7919831930668861,
+      0.8030655098096062,
+      0.8141478265523265,
+      0.8252301432950466,
+      0.8363124600377667,
+      0.8473947767804868,
+      0.8584770935232071,
+      0.8695594102659272,
+      0.8806417270086473,
+      0.8917240437513674
+    ],
+    "max_fluorescence": [
+      0.8200000000000001,
+      0.8400000000000001,
+      0.8600000000000001,
+      0.8800000000000001,
+      0.9,
+      0.92,
+      0.9400000000000001,
+      0.9600000000000001,
+      0.9800000000000001,
+      1.0
+    ],
+    "boundary_points": [
+      {
+        "fsc": 0.7919831930668861,
+        "max_fluorescence": 0.8200000000000001
+      },
+      {
+        "fsc": 0.8030655098096062,
+        "max_fluorescence": 0.8400000000000001
+      },
+      {
+        "fsc": 0.8141478265523265,
+        "max_fluorescence": 0.8600000000000001
+      },
+      {
+        "fsc": 0.8252301432950466,
+        "max_fluorescence": 0.8800000000000001
+      },
+      {
+        "fsc": 0.8363124600377667,
+        "max_fluorescence": 0.9
+      },
+      {
+        "fsc": 0.8473947767804868,
+        "max_fluorescence": 0.92
+      },
+      {
+        "fsc": 0.8584770935232071,
+        "max_fluorescence": 0.9400000000000001
+      },
+      {
+        "fsc": 0.8695594102659272,
+        "max_fluorescence": 0.9600000000000001
+      },
+      {
+        "fsc": 0.8806417270086473,
+        "max_fluorescence": 0.9800000000000001
+      },
+      {
+        "fsc": 0.8917240437513674,
+        "max_fluorescence": 1.0
+      }
+    ],
+    "rule": "For each event, interpolate max_fluorescence from the piecewise boundary using its FSC value. Keep event if fluorescence >= dg_low_cut and fluorescence <= interpolated max_fluorescence."
+  },
+  "event_counts": {
+    "n_total_events": 54089,
+    "n_finite_events": 54089,
+    "n_mmb_roi_events": 21031,
+    "n_after_piecewise_gate": 19754
+  }
+}

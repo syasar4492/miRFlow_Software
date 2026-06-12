@@ -1,0 +1,160 @@
+{
+  "file": "NEC 5.fcs",
+  "sample": "NEC 5",
+  "channels": {
+    "fluor": "B525-H",
+    "fsc": "FSC-H"
+  },
+  "transform_source": "flowutils.transforms.logicle",
+  "windows": {
+    "mmb_window": [
+      0.7864420346955261,
+      0.8972652021227275
+    ],
+    "dg_low_cut": 0.1
+  },
+  "piecewise_dg_high_boundary": {
+    "fsc_bin_centres": [
+      0.7919831930668861,
+      0.8030655098096062,
+      0.8141478265523265,
+      0.8252301432950466,
+      0.8363124600377667,
+      0.8473947767804868,
+      0.8584770935232071,
+      0.8695594102659272,
+      0.8806417270086473,
+      0.8917240437513674
+    ],
+    "max_fluorescence": [
+      0.8200000000000001,
+      0.8400000000000001,
+      0.8600000000000001,
+      0.8800000000000001,
+      0.9,
+      0.92,
+      0.9400000000000001,
+      0.9600000000000001,
+      0.9800000000000001,
+      1.0
+    ]
+  },
+  "boundaries": {
+    "boundary_6_8": 0.8456298548013006
+  },
+  "n_total_events": 86436,
+  "n_finite": 86436,
+  "n_roi_events": 19112,
+  "percentiles_init": {
+    "LOW_Q": 20,
+    "LOWMID_Q": 40,
+    "MIDHIGH_Q": 60,
+    "HIGH_Q": 80
+  },
+  "min_events": {
+    "MIN_EVENTS_4COMP": 1000,
+    "MIN_EVENTS_2COMP": 300
+  },
+  "hard_counts": {
+    "MMB-6 only": 7512,
+    "MMB-6 sandwich_v1": 378,
+    "MMB-6 sandwich_v2": 276,
+    "MMB-6 sandwich_v3": 2852,
+    "MMB-8 only": 5908,
+    "MMB-8 sandwich_v1": 776,
+    "MMB-8 sandwich_v2": 177,
+    "MMB-8 sandwich_v3": 1233
+  },
+  "expected_counts": {
+    "MMB-6 only": 7512.0,
+    "MMB-6 sandwich_v1": 378.0,
+    "MMB-6 sandwich_v2": 276.0,
+    "MMB-6 sandwich_v3": 2852.0,
+    "MMB-8 only": 5908.0,
+    "MMB-8 sandwich_v1": 776.0,
+    "MMB-8 sandwich_v2": 177.0,
+    "MMB-8 sandwich_v3": 1233.0
+  },
+  "shared_fluorescence_state_boundaries": {
+    "reference_population": "MMB-6",
+    "reference_gmm_model": "gmm4",
+    "reference_means": [
+      0.1266240416154826,
+      0.14298277205142923,
+      0.19493042335865787,
+      0.5545083670885895
+    ],
+    "boundaries": [
+      0.13480340683345593,
+      0.16895659770504357,
+      0.3747193952236237
+    ],
+    "state_assignment_rule": {
+      "only": "fluorescence < boundary_0",
+      "sandwich_v1": "boundary_0 <= fluorescence < boundary_1",
+      "sandwich_v2": "boundary_1 <= fluorescence < boundary_2",
+      "sandwich_v3": "fluorescence >= boundary_2"
+    }
+  },
+  "per_bead": {
+    "6": {
+      "n_roi_events": 11018,
+      "model": "shared_mmb6_reference_boundaries",
+      "reference_population": "MMB-6",
+      "reference_gmm_model": "gmm4",
+      "means": [
+        0.1266240416154826,
+        0.14298277205142923,
+        0.19493042335865787,
+        0.5545083670885895
+      ],
+      "shared_state_boundaries": [
+        0.13480340683345593,
+        0.16895659770504357,
+        0.3747193952236237
+      ],
+      "expected": {
+        "only": 7512.0,
+        "sandwich_v1": 378.0,
+        "sandwich_v2": 276.0,
+        "sandwich_v3": 2852.0,
+        "sandwich_total": 3506.0,
+        "normalised_sandwich_v1_events (%)": 4.7908745247148286,
+        "normalised_sandwich_v2_events (%)": 3.5439137134052388,
+        "normalised_sandwich_v3_events (%)": 27.51833269008105,
+        "normalised_total_sandwich_events (%)": 31.820657106552915
+      },
+      "warning": null
+    },
+    "8": {
+      "n_roi_events": 8094,
+      "model": "shared_mmb6_reference_boundaries",
+      "reference_population": "MMB-6",
+      "reference_gmm_model": "gmm4",
+      "means": [
+        0.1266240416154826,
+        0.14298277205142923,
+        0.19493042335865787,
+        0.5545083670885895
+      ],
+      "shared_state_boundaries": [
+        0.13480340683345593,
+        0.16895659770504357,
+        0.3747193952236237
+      ],
+      "expected": {
+        "only": 5908.0,
+        "sandwich_v1": 776.0,
+        "sandwich_v2": 177.0,
+        "sandwich_v3": 1233.0,
+        "sandwich_total": 2186.0,
+        "normalised_sandwich_v1_events (%)": 11.6098144823459,
+        "normalised_sandwich_v2_events (%)": 2.9087921117502056,
+        "normalised_sandwich_v3_events (%)": 17.266489287214675,
+        "normalised_total_sandwich_events (%)": 27.007659995058066
+      },
+      "warning": null
+    }
+  },
+  "warnings": []
+}
